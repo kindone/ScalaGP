@@ -16,7 +16,10 @@ class Ref(val id:Int, table:Vector[Double]) extends Expression
   def apply() = table(table.size % id)
 }
 
-abstract class Operation extends Expression
+class Operation extends Expression
+{
+  def subtreeSize:Int
+}
 
 case class Add(left:Expression, right:Expression) extends Operation {
   def apply() = left() + right()
@@ -125,7 +128,7 @@ case class If(left:Expression, center:Expression, right:Expression) extends Oper
 
 class ExpressionTree(val root:Expression)
 {
-  def evaluate() = root.apply()
+  def evaluate() = root()
 
   // for crossover
   def splice() = {}

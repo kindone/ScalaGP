@@ -20,6 +20,7 @@ libraryDependencies ++= Seq(
   "net.fwbrasil" % "activate-jdbc" % "1.2",
   "net.fwbrasil" % "activate-play" % "1.2",*/
 //  "net.fwbrasil" % "activate_2.10" % "1.2",
+  "org.spire-math" %% "spire" % "0.5.0",
   "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test"
 )
 
