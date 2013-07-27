@@ -1,22 +1,5 @@
 package kindone.scalagp
 
-trait Branch1
-{
-	self: {def center:Expression } => 
-	lazy val subtreeSize = center.subtreeSize
-}
-
-trait Branch2
-{
-	self: {def left:Expression; def right:Expression } => 
-	lazy val subtreeSize = left.subtreeSize + right.subtreeSize
-}
-
-trait Branch3
-{
-	self: {def left:Expression; def center:Expression; def right:Expression } => 
-	lazy val subtreeSize = left.subtreeSize + center.subtreeSize + right.subtreeSize
-}
 
 trait Expression
 {
