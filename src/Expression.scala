@@ -40,23 +40,23 @@ abstract class Operation extends Expression
 
 abstract class UnaryOperation
 {
-  def center:Expression
-  lazy val subtreeSize = center.subtreeSize
+	def center:Expression
+	lazy val subtreeSize = center.subtreeSize
 }
 
 abstract class BinaryOperation
 {
-  def left:Expression
-  def right:Expression
-  lazy val subtreeSize = left.subtreeSize + right.subtreeSize
+	def left:Expression
+	def right:Expression
+	lazy val subtreeSize = left.subtreeSize + right.subtreeSize
 }
 
 abstract class TernaryOperation
 {
-  def left:Expression
-  def right:Expression
-  def center:Expression
-  lazy val subtreeSize = left.subtreeSize + center.subtreeSize + right.subtreeSize
+	def left:Expression
+	def right:Expression
+	def center:Expression
+	lazy val subtreeSize = left.subtreeSize + center.subtreeSize + right.subtreeSize
 }
 
 case class Add(left:Expression, right:Expression) extends BinaryOperation {
