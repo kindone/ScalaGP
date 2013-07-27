@@ -18,7 +18,6 @@ trait Branch3
 	lazy val subtreeSize = left.subtreeSize + center.subtreeSize + right.subtreeSize
 }
 
-
 trait Expression
 {
 	def apply():Double
@@ -38,111 +37,130 @@ class Ref(val id:Int, table:Vector[Double]) extends Expression
 }
 
 abstract class Operation extends Expression
+
+abstract class UnaryOperation
 {
+  def center:Expression
+  lazy val subtreeSize = center.subtreeSize
 }
 
-case class Add(left:Expression, right:Expression) extends Operation with Branch2 {
+abstract class BinaryOperation
+{
+  def left:Expression
+  def right:Expression
+  lazy val subtreeSize = left.subtreeSize + right.subtreeSize
+}
+
+abstract class TernaryOperation
+{
+  def left:Expression
+  def right:Expression
+  def center:Expression
+  lazy val subtreeSize = left.subtreeSize + center.subtreeSize + right.subtreeSize
+}
+
+case class Add(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left() + right()
 }
 
-case class Subtract(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Subtract(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left() - right()
 } 
 
-case class Multiply(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Multiply(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left() * right()
 }
 
-case class Divide(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Divide(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(scala.math.abs(right()) <= 0.1E-6) 0.0 else left() / right()
 }
 
-case class Modular(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Modular(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left() % right()
 }
 
-case class Pow(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Pow(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = Math.pow(left(), right())
 }
 
-case class Sqrt(center:Expression) extends Operation with Branch1 {
+case class Sqrt(center:Expression) extends UnaryOperation {
 	def apply() = Math.sqrt(center())
 }
 
-case class Ceil(center:Expression) extends Operation with Branch1 {
+case class Ceil(center:Expression) extends UnaryOperation {
 	def apply() = Math.ceil(center())
 }
 
-case class Floor(center:Expression) extends Operation with Branch1 {
+case class Floor(center:Expression) extends UnaryOperation {
 	def apply() = Math.floor(center())
 }
 
-case class ToInt(left:Expression, right:Expression) extends Operation with Branch2 {
+case class ToInt(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left().toInt
 }
 
-case class ToBoolean(center:Expression) extends Operation with Branch1 {
+case class ToBoolean(center:Expression) extends UnaryOperation {
 	def apply() = if(center() > 0.0) 1.0 else 0.0
 }
 
 
-case class Or(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Or(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left().toInt | right().toInt
 }
 
-case class And(left:Expression, right:Expression) extends Operation with Branch2 {
+case class And(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left().toInt & right().toInt
 }
 
-case class Not(center:Expression) extends Operation with Branch1 {
+case class Not(center:Expression) extends UnaryOperation {
 	def apply() = if(center() > 0.0) 0.0 else 1.0
 }
 
-case class Xor(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Xor(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left().toInt & right().toInt
 }
 
-case class ShiftLeft(left:Expression, right:Expression) extends Operation with Branch2 {
+case class ShiftLeft(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left().toInt << right().toInt
 }
 
-case class ShiftRight(left:Expression, right:Expression) extends Operation with Branch2 {
+case class ShiftRight(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = left().toInt >> right().toInt
 }
 
-case class Equals(left:Expression, right:Expression) extends Operation with Branch2 {
+case class Equals(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(left() == right()) 1.0 else 0.0
 }
 
-case class NotEquals(left:Expression, right:Expression) extends Operation with Branch2 {
+case class NotEquals(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(left() != right()) 1.0 else 0.0
 }
 
-case class GreaterThanOrEquals(left:Expression, right:Expression) extends Operation with Branch2 {
+case class GreaterThanOrEquals(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(left() >= right()) 1.0 else 0.0
 }
 
-case class LessThanOrEquals(left:Expression, right:Expression) extends Operation with Branch2 {
+case class LessThanOrEquals(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(left() <= right()) 1.0 else 0.0
 }
 
-case class GreaterThan(left:Expression, right:Expression) extends Operation with Branch2 {
+case class GreaterThan(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(left() > right()) 1.0 else 0.0
 }
 
-case class LessThan(left:Expression, right:Expression) extends Operation with Branch2 {
+case class LessThan(left:Expression, right:Expression) extends BinaryOperation {
 	def apply() = if(left() < right()) 1.0 else 0.0
 }
 
-case class IsZero(center:Expression) extends Operation with Branch1 {
+case class IsZero(center:Expression) extends UnaryOperation {
 	def apply() = if(center() == 0.0) 1.0 else 0.0
 }
 
-case class IsNonZero(center:Expression) extends Operation with Branch1 {
+case class IsNonZero(center:Expression) extends UnaryOperation {
 	def apply() = if(center() != 0.0) 1.0 else 0.0
 }
 
-case class If(left:Expression, center:Expression, right:Expression) extends Operation with Branch3 {
+case class If(left:Expression, center:Expression, right:Expression) extends TernaryOperation {
 	def apply() = if(center() > 0.0) left() else right()
 }
 
