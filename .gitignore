@@ -2,6 +2,11 @@
 *.log
 *.swp
 
+.DS_Store
+.classpath
+.project
+*.sublime-project
+
 # sbt specific
 dist/*
 target/
