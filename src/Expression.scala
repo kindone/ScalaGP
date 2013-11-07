@@ -21,13 +21,4 @@ class Ref(val id:Int, table:Vector[Double]) extends Expression
 
 abstract class Operation extends Expression
 
-class ExpressionTree(val root:Expression)
-{
-	def evaluate() = root()
 
-	// for crossover
-//	def splice():(ExpressionTree, ExpressionTree) = {}
-
-	def mutate() = {}
-
-}
