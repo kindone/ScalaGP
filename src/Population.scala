@@ -1,5 +1,4 @@
 package kindone.scalagp
 
-class Population
-{
+class Population {
 }
