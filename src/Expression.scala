@@ -6,16 +6,18 @@ trait Expression {
 	def subexpression(pos: Int): Expression
 }
 
-class Val(val value: Double) extends Expression {
+case class Val(val value: Double) extends Expression {
 	def apply() = value
 	val size = 1
 	def subexpression(pos: Int): Expression = this
+	def copy(n: Double) = new Val(n)
 }
 
-class Ref(val id: Int, table: Vector[Double]) extends Expression {
+case class Ref(val id: Int, table: Vector[Double]) extends Expression {
 	def apply() = table(table.size % id)
 	val size = 1
 	def subexpression(pos: Int): Expression = this
+	def copy(n: Int) = new Ref(n, table)
 }
 
 abstract class Operation extends Expression
