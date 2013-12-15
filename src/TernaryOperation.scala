@@ -22,10 +22,12 @@ abstract class TernaryOperation extends Operation {
 			left.subexpression(pos)
 	}
 
+	def copy(l: Expression, c: Expression, r: Expression): Expression
 }
 
 case class If(left: Expression, center: Expression, right: Expression) extends TernaryOperation {
 	def apply() = if (center() > 0.0) left() else right()
+	def copy(l: Expression, c: Expression, r: Expression) = If(l, c, r)
 }
 
 // vim: set ts=4 sw=4 et:
