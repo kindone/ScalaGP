@@ -29,11 +29,11 @@ object Application extends App {
 		val sortedPopWithScore = popWithScore.sortWith(_._2 > _._2)
 		val selected = sortedPopWithScore.take(10)
 		// crossover, mutate
-		val reproduced = selected.map { (individual, score) =>
-			individual.crossover
-		}
-		// replace
-		val replaced = popWithScore.drop(10)
+		//		val reproduced = selected.map { (individual, score) =>
+		//			individual.crossover
+		//		}
+		//		// replace
+		//		val replaced = popWithScore.drop(10)
 
 		population
 	}

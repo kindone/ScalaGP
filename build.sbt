@@ -2,7 +2,7 @@ name := "ScalaGP"
 
 version := "1.0"
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.10.1"
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
@@ -24,8 +24,8 @@ libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test"
 )
 
-scalaSource in Test <<= baseDirectory(_ /"test")
-
-scalaSource in Compile <<= baseDirectory(_ /"src")
+//scalaSource in Test <<= baseDirectory(_ /"test")
 
 ScoverageSbtPlugin.instrumentSettings
+
+//scalaSource in Compile <<= baseDirectory(_ /"src")
