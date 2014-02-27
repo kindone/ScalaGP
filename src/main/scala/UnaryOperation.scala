@@ -16,42 +16,42 @@ abstract class UnaryOperation extends Operation {
 }
 
 case class Sqrt(center: Expression) extends UnaryOperation {
-	def apply() = Math.sqrt(center())
+	def apply(implicit table: Vector[Double]) = Math.sqrt(center.apply)
 	def copy(c: Expression) = Sqrt(c)
 }
 
 case class Ceil(center: Expression) extends UnaryOperation {
-	def apply() = Math.ceil(center())
+	def apply(implicit table: Vector[Double]) = Math.ceil(center.apply)
 	def copy(c: Expression) = Ceil(c)
 }
 
 case class Floor(center: Expression) extends UnaryOperation {
-	def apply() = Math.floor(center())
+	def apply(implicit table: Vector[Double]) = Math.floor(center.apply)
 	def copy(c: Expression) = Floor(c)
 }
 
 case class ToInt(center: Expression) extends UnaryOperation {
-	def apply() = center().toInt
+	def apply(implicit table: Vector[Double]) = center.apply.toInt
 	def copy(c: Expression) = ToInt(c)
 }
 
 case class ToBoolean(center: Expression) extends UnaryOperation {
-	def apply() = if (center() > 0.0) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (center.apply > 0.0) 1.0 else 0.0
 	def copy(c: Expression) = ToBoolean(c)
 }
 
 case class Not(center: Expression) extends UnaryOperation {
-	def apply() = if (center() > 0.0) 0.0 else 1.0
+	def apply(implicit table: Vector[Double]) = if (center.apply > 0.0) 0.0 else 1.0
 	def copy(c: Expression) = Not(c)
 }
 
 case class IsZero(center: Expression) extends UnaryOperation {
-	def apply() = if (center() == 0.0) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (center.apply == 0.0) 1.0 else 0.0
 	def copy(c: Expression) = IsZero(c)
 }
 
 case class IsNonZero(center: Expression) extends UnaryOperation {
-	def apply() = if (center() != 0.0) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (center.apply != 0.0) 1.0 else 0.0
 	def copy(c: Expression) = IsNonZero(c)
 }
 

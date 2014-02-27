@@ -22,87 +22,87 @@ abstract class BinaryOperation extends Operation {
 }
 
 case class Add(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left() + right()
+	def apply(implicit table: Vector[Double]) = left.apply + right.apply
 	def copy(l: Expression, r: Expression) = Add(l, r)
 }
 
 case class Subtract(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left() - right()
+	def apply(implicit table: Vector[Double]) = left.apply - right.apply
 	def copy(l: Expression, r: Expression) = Subtract(l, r)
 }
 
 case class Multiply(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left() * right()
+	def apply(implicit table: Vector[Double]) = left.apply * right.apply
 	def copy(l: Expression, r: Expression) = Multiply(l, r)
 }
 
 case class Divide(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (scala.math.abs(right()) <= 0.1E-6) 0.0 else left() / right()
+	def apply(implicit table: Vector[Double]) = if (scala.math.abs(right.apply) <= 0.1E-6) 0.0 else left.apply / right.apply
 	def copy(l: Expression, r: Expression) = Divide(l, r)
 }
 
 case class Modular(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left() % right()
+	def apply(implicit table: Vector[Double]) = left.apply % right.apply
 	def copy(l: Expression, r: Expression) = Modular(l, r)
 }
 
 case class Pow(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = Math.pow(left(), right())
+	def apply(implicit table: Vector[Double]) = Math.pow(left.apply, right.apply)
 	def copy(l: Expression, r: Expression) = Pow(l, r)
 }
 
 case class Or(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left().toInt | right().toInt
+	def apply(implicit table: Vector[Double]) = left.apply.toInt | right.apply.toInt
 	def copy(l: Expression, r: Expression) = Or(l, r)
 }
 
 case class And(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left().toInt & right().toInt
+	def apply(implicit table: Vector[Double]) = left.apply.toInt & right.apply.toInt
 	def copy(l: Expression, r: Expression) = And(l, r)
 }
 
 case class Xor(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left().toInt & right().toInt
+	def apply(implicit table: Vector[Double]) = left.apply.toInt & right.apply.toInt
 	def copy(l: Expression, r: Expression) = Xor(l, r)
 }
 
 case class ShiftLeft(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left().toInt << right().toInt
+	def apply(implicit table: Vector[Double]) = left.apply.toInt << right.apply.toInt
 	def copy(l: Expression, r: Expression) = ShiftLeft(l, r)
 }
 
 case class ShiftRight(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = left().toInt >> right().toInt
+	def apply(implicit table: Vector[Double]) = left.apply.toInt >> right.apply.toInt
 	def copy(l: Expression, r: Expression) = ShiftRight(l, r)
 }
 
 case class Equals(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (left() == right()) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (left.apply == right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = Equals(l, r)
 }
 
 case class NotEquals(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (left() != right()) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (left.apply != right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = NotEquals(l, r)
 }
 
 case class GreaterThanOrEquals(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (left() >= right()) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (left.apply >= right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = GreaterThanOrEquals(l, r)
 }
 
 case class LessThanOrEquals(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (left() <= right()) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (left.apply <= right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = LessThanOrEquals(l, r)
 }
 
 case class GreaterThan(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (left() > right()) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (left.apply > right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = GreaterThan(l, r)
 }
 
 case class LessThan(left: Expression, right: Expression) extends BinaryOperation {
-	def apply() = if (left() < right()) 1.0 else 0.0
+	def apply(implicit table: Vector[Double]) = if (left.apply < right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = LessThan(l, r)
 }
 

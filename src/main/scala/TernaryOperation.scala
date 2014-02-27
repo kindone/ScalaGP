@@ -26,7 +26,7 @@ abstract class TernaryOperation extends Operation {
 }
 
 case class If(left: Expression, center: Expression, right: Expression) extends TernaryOperation {
-	def apply() = if (center() > 0.0) left() else right()
+	def apply(implicit table: Vector[Double]) = if (center.apply > 0.0) left.apply else right.apply
 	def copy(l: Expression, c: Expression, r: Expression) = If(l, c, r)
 }
 

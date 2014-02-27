@@ -12,7 +12,7 @@ object ExpressionTree {
 		val n = randomInt(2)
 		n match {
 			case 0 => Val(randomDouble * randomInt(10000))
-			case 1 => Val(randomDouble)
+			case 1 => Ref(randomInt(1000000))
 			case _ => throw new RuntimeException("Unexpected random number")
 		}
 	}
@@ -21,7 +21,7 @@ object ExpressionTree {
 		val n = randomInt(20)
 		n match {
 			case 0 => Val(randomDouble * randomInt(10000))
-			case 1 => Val(randomDouble) //Ref(randomInt(1000), Vector(1)) // FIXME
+			case 1 => Ref(randomInt(1000000))
 			case 2 => If(randomTerminal, randomTerminal, randomTerminal)
 			case 3 => Add(randomTerminal, randomTerminal)
 			case 4 => Subtract(randomTerminal, randomTerminal)
@@ -46,7 +46,7 @@ object ExpressionTree {
 }
 
 case class ExpressionTree(val root: Expression) {
-	def evaluate() = root()
+	def evaluate(implicit table: Vector[Double]) = root.apply
 
 	// construct by replacing oldsub with newsub
 	def replace(oldsub: Expression, newsub: Expression) = {
@@ -116,11 +116,11 @@ case class ExpressionTree(val root: Expression) {
 	}
 
 	// 
-	def mutateLeaf() = {
+	def mutateLeaf(): ExpressionTree = {
 		val a = ExpressionTree.randomInt(root.size - 1)
 		val target = root.subexpression(a)
 
-		replace(target, ExpressionTree.randomTree)
+		ExpressionTree(replace(target, ExpressionTree.randomTree))
 	}
 
 }
