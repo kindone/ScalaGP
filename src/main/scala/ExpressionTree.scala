@@ -43,6 +43,31 @@ object ExpressionTree {
 			case _ => throw new RuntimeException("Unexpected random number")
 		}
 	}
+
+	def randomNonTerminal(): Expression = {
+		val n = randomInt(18) + 2
+		n match {
+			case 2 => If(randomTerminal, randomTerminal, randomTerminal)
+			case 3 => Add(randomTerminal, randomTerminal)
+			case 4 => Subtract(randomTerminal, randomTerminal)
+			case 5 => Multiply(randomTerminal, randomTerminal)
+			case 6 => Divide(randomTerminal, randomTerminal)
+			case 7 => Modular(randomTerminal, randomTerminal)
+			case 8 => Pow(randomTerminal, randomTerminal)
+			case 9 => Or(randomTerminal, randomTerminal)
+			case 10 => And(randomTerminal, randomTerminal)
+			case 11 => Xor(randomTerminal, randomTerminal)
+			case 12 => ShiftLeft(randomTerminal, randomTerminal)
+			case 13 => ShiftRight(randomTerminal, randomTerminal)
+			case 14 => Equals(randomTerminal, randomTerminal)
+			case 15 => NotEquals(randomTerminal, randomTerminal)
+			case 16 => GreaterThanOrEquals(randomTerminal, randomTerminal)
+			case 17 => LessThanOrEquals(randomTerminal, randomTerminal)
+			case 18 => GreaterThan(randomTerminal, randomTerminal)
+			case 19 => LessThan(randomTerminal, randomTerminal)
+			case _ => throw new RuntimeException("Unexpected random number")
+		}
+	}
 }
 
 case class ExpressionTree(val root: Expression) {
@@ -50,9 +75,6 @@ case class ExpressionTree(val root: Expression) {
 
 	// construct by replacing oldsub with newsub
 	def replace(oldsub: Expression, newsub: Expression) = {
-		if (oldsub eq root)
-			throw new RuntimeException("unexpected self-referencing subexpression")
-
 		// traverse down the tree, and build the subtree
 		def build(sub: Expression): Expression = {
 			sub match {
@@ -97,14 +119,17 @@ case class ExpressionTree(val root: Expression) {
 			}
 		}
 
-		build(root)
+		if (oldsub eq root)
+			newsub.copy
+		else
+			build(root)
 	}
 
 	// for crossover
 	// given two expression trees, generate another pair of expression trees
 	def crossover(other: ExpressionTree): (ExpressionTree, ExpressionTree) = {
-		val a = ExpressionTree.randomInt(root.size - 1)
-		val b = ExpressionTree.randomInt(other.root.size - 1)
+		val a = ExpressionTree.randomInt(root.size)
+		val b = ExpressionTree.randomInt(other.root.size)
 
 		val subtree1 = root.subexpression(a)
 		val subtree2 = other.root.subexpression(b)
@@ -115,9 +140,18 @@ case class ExpressionTree(val root: Expression) {
 		(ExpressionTree(newtree1), ExpressionTree(newtree2))
 	}
 
+	def mutateRoot(): ExpressionTree = {
+		val newTree = ExpressionTree.randomNonTerminal
+		val a = ExpressionTree.randomInt(newTree.size)
+		val subtree = newTree.subexpression(a)
+		val newTreeIncluded = ExpressionTree(newTree).replace(subtree, root)
+
+		ExpressionTree(newTreeIncluded)
+	}
+
 	// 
 	def mutateLeaf(): ExpressionTree = {
-		val a = ExpressionTree.randomInt(root.size - 1)
+		val a = ExpressionTree.randomInt(root.size)
 		val target = root.subexpression(a)
 
 		ExpressionTree(replace(target, ExpressionTree.randomTree))

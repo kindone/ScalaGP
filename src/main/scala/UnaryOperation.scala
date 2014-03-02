@@ -13,11 +13,13 @@ abstract class UnaryOperation extends Operation {
 	}
 
 	def copy(newCenter: Expression): Expression
+	def copy(): Expression = copy(center.copy)
 }
 
 case class Sqrt(center: Expression) extends UnaryOperation {
 	def apply(implicit table: Vector[Double]) = Math.sqrt(center.apply)
 	def copy(c: Expression) = Sqrt(c)
+	override def toString() = s"Sqrt(${center.toString})"
 }
 
 case class Ceil(center: Expression) extends UnaryOperation {
