@@ -9,31 +9,34 @@ object Application extends App {
 
 	// prepare initial population
 	def init(num: Int): List[ExpressionTree] = {
-		(1 to num).foldLeft[List[ExpressionTree]](List()) { (acc, i) =>
+		(0 until num).foldLeft[List[ExpressionTree]](List()) { (acc, i) =>
 			acc :+ ExpressionTree(ExpressionTree.randomTree)
 		}
 	}
 
-	// fitress evaluation
-	def evaluate(individual: ExpressionTree) = {
+	def samples(num: Int) = {
+		(0 until num).foldLeft[Seq[Seq[Double]]](Seq()) { (acc, i) =>
+			acc.+:(Seq[Double](rand.nextDouble() * rand.nextInt(100000), rand.nextDouble() * rand.nextInt(100000), rand.nextDouble() * rand.nextInt(100000)))
+		}
+	}
 
-		var rms = 0.0
-		for (i <- 0 until 20) {
-			implicit val refs = Vector[Double](rand.nextDouble() * rand.nextInt(10000), rand.nextDouble() * rand.nextInt(10000), rand.nextDouble() * rand.nextInt(10000))
+	// fitress evaluation
+	def evaluate(individual: ExpressionTree, listOfSamples: Seq[Seq[Double]]) = {
+
+		listOfSamples.foldLeft[Double](0.0) { (acc, samples) =>
 			// run sampled evaluation
+			implicit val refs: Vector[Double] = samples.toVector
+			val actual = Math.pow(refs(0), 3) + Math.pow(refs(1), 2) - refs(2)
 			val score_ = individual.evaluate
 			val score =
 				if (score_.isNaN)
 					0.0
 				else if (score_.isInfinity)
-					0.0
+					Double.MaxValue
 				else
 					score_
-
-			val actual = refs(0) + refs(1) + refs(2) * 3 //Math.pow(refs(0), 3) + Math.pow(refs(1), 2) - refs(2)
-			rms += Math.pow(score - actual, 2)
+			acc + Math.pow(score - actual, 2)
 		}
-		rms
 	}
 
 	//routelette wheel selection
@@ -43,8 +46,9 @@ object Application extends App {
 	// run current generation
 	def step(population: List[ExpressionTree]): (List[ExpressionTree], (ExpressionTree, Double)) = {
 		// evaluate
+		val sampleSet = samples(100)
 		val popWithScore = population.map { individual =>
-			val score_ = evaluate(individual)
+			val score_ = evaluate(individual, sampleSet)
 			val score =
 				if (score_.isNaN)
 					0.0
@@ -64,18 +68,35 @@ object Application extends App {
 			case (acc, (individual, score)) =>
 				val randomIndividual = population(rand.nextInt(population.size))
 				val pairs = individual.crossover(randomIndividual)
-				acc.+:(pairs._1.mutateLeaf.mutateRoot).+:(pairs._2.mutateLeaf.mutateRoot)
+				val mutatedPairs1 = List(pairs._1, pairs._2).map { individual =>
+					if (rand.nextFloat < 0.1)
+						individual.mutateRoot
+					else
+						individual
+				}
+				val mutatedPairs2 = mutatedPairs1.map { individual =>
+					if (rand.nextFloat < 0.1)
+						individual.mutateLeaf
+					else
+						individual
+				}
+				acc.+:(mutatedPairs2.head).+:(mutatedPairs2.last)
 		}
 		// replace bottom 10 with the reproduced
-		(reproduced ++ sortedPopWithScore.drop(10).map(_._1), best)
+		(reproduced ++ sortedPopWithScore.dropRight(10).map(_._1), best)
 
 	}
 
 	var cur = init(100)
-	for (i <- 0 until 1000) {
+	var bestSoFar = Double.MaxValue
+	println(bestSoFar)
+	for (i <- 0 until 10000) {
 		val (next, best) = step(cur)
 		cur = next
-		println(best._1, best._2)
+		if (bestSoFar > best._2) {
+			bestSoFar = best._2
+			println(best._1, best._2)
+		}
 	}
 
 	//val t1 = ExpressionTree(ExpressionTree.randomTree)

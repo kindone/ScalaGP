@@ -45,15 +45,18 @@ case class ToBoolean(center: Expression) extends UnaryOperation {
 case class Not(center: Expression) extends UnaryOperation {
 	def apply(implicit table: Vector[Double]) = if (center.apply > 0.0) 0.0 else 1.0
 	def copy(c: Expression) = Not(c)
+	override def toString() = s"!(${center.toString})"
 }
 
 case class IsZero(center: Expression) extends UnaryOperation {
 	def apply(implicit table: Vector[Double]) = if (center.apply == 0.0) 1.0 else 0.0
 	def copy(c: Expression) = IsZero(c)
+	override def toString() = s"(${center.toString}) == 0"
 }
 
 case class IsNonZero(center: Expression) extends UnaryOperation {
 	def apply(implicit table: Vector[Double]) = if (center.apply != 0.0) 1.0 else 0.0
 	def copy(c: Expression) = IsNonZero(c)
+	override def toString() = s"(${center.toString}) != 0"
 }
 

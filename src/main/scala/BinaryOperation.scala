@@ -109,16 +109,19 @@ case class GreaterThanOrEquals(left: Expression, right: Expression) extends Bina
 case class LessThanOrEquals(left: Expression, right: Expression) extends BinaryOperation {
 	def apply(implicit table: Vector[Double]) = if (left.apply <= right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = LessThanOrEquals(l, r)
+	override def toString() = s"($left) <= ($right)"
 }
 
 case class GreaterThan(left: Expression, right: Expression) extends BinaryOperation {
 	def apply(implicit table: Vector[Double]) = if (left.apply > right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = GreaterThan(l, r)
+	override def toString() = s"($left) > ($right)"
 }
 
 case class LessThan(left: Expression, right: Expression) extends BinaryOperation {
 	def apply(implicit table: Vector[Double]) = if (left.apply < right.apply) 1.0 else 0.0
 	def copy(l: Expression, r: Expression) = LessThan(l, r)
+	override def toString() = s"($left) < ($right)"
 }
 
 // vim: set ts=4 sw=4 et:
