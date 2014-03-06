@@ -37,7 +37,7 @@ case class Subtract(left: Expression, right: Expression) extends BinaryOperation
 case class Multiply(left: Expression, right: Expression) extends BinaryOperation {
 	def apply(implicit table: Vector[Double]) = left.apply * right.apply
 	def copy(l: Expression, r: Expression) = Multiply(l, r)
-	override def toString() = s"($left) / ($right)"
+	override def toString() = s"($left) * ($right)"
 }
 
 case class Divide(left: Expression, right: Expression) extends BinaryOperation {

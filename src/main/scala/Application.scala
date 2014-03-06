@@ -36,7 +36,7 @@ object Application extends App {
 				else
 					score_
 			acc + Math.pow(score - actual, 2)
-		}
+		} + Math.pow(2, individual.root.size)*1.0E-7
 	}
 
 	//routelette wheel selection
@@ -90,7 +90,7 @@ object Application extends App {
 	var cur = init(100)
 	var bestSoFar = Double.MaxValue
 	println(bestSoFar)
-	for (i <- 0 until 10000) {
+	for (i <- 0 until 1000) {
 		val (next, best) = step(cur)
 		cur = next
 		if (bestSoFar > best._2) {
