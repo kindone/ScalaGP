@@ -18,7 +18,7 @@ object ExpressionTree {
 	}
 
 	def randomTree(): Expression = {
-		val n = randomInt(20)
+		val n = randomInt(30)
 		n match {
 			case 0 => Val(randomDouble * randomInt(10000))
 			case 1 => Ref(randomInt(1000000))
@@ -40,12 +40,22 @@ object ExpressionTree {
 			case 17 => LessThanOrEquals(randomTerminal, randomTerminal)
 			case 18 => GreaterThan(randomTerminal, randomTerminal)
 			case 19 => LessThan(randomTerminal, randomTerminal)
+			case 20 => Ceil(randomTerminal)
+			case 21 => Floor(randomTerminal)
+			case 22 => ToInt(randomTerminal)
+			case 23 => ToBoolean(randomTerminal)
+			case 24 => Not(randomTerminal)
+			case 25 => IsZero(randomTerminal)
+			case 26 => IsNonZero(randomTerminal)
+			case 27 => Sqrt(randomTerminal)
+			case 28 => Sin(randomTerminal)
+			case 29 => Cos(randomTerminal)
 			case _ => throw new RuntimeException("Unexpected random number")
 		}
 	}
 
 	def randomNonTerminal(): Expression = {
-		val n = randomInt(18) + 2
+		val n = randomInt(28) + 2
 		n match {
 			case 2 => If(randomTerminal, randomTerminal, randomTerminal)
 			case 3 => Add(randomTerminal, randomTerminal)
@@ -65,6 +75,17 @@ object ExpressionTree {
 			case 17 => LessThanOrEquals(randomTerminal, randomTerminal)
 			case 18 => GreaterThan(randomTerminal, randomTerminal)
 			case 19 => LessThan(randomTerminal, randomTerminal)
+			case 20 => Ceil(randomTerminal)
+			case 21 => Floor(randomTerminal)
+			case 22 => ToInt(randomTerminal)
+			case 23 => ToBoolean(randomTerminal)
+			case 24 => Not(randomTerminal)
+			case 25 => IsZero(randomTerminal)
+			case 26 => IsNonZero(randomTerminal)
+			case 27 => Sqrt(randomTerminal)
+			case 28 => Sin(randomTerminal)
+			case 29 => Cos(randomTerminal)
+
 			case _ => throw new RuntimeException("Unexpected random number")
 		}
 	}

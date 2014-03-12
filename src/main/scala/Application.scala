@@ -26,7 +26,7 @@ object Application extends App {
 		listOfSamples.foldLeft[Double](0.0) { (acc, samples) =>
 			// run sampled evaluation
 			implicit val refs: Vector[Double] = samples.toVector
-			val actual = Math.pow(refs(0), 3) + Math.pow(refs(1), 2) - refs(2)
+			val actual = Math.pow(refs(1), Math.sin(4 * Math.cos(refs(0)))) + Math.pow(refs(0), 3) + Math.pow(refs(1), 2) - refs(2)
 			val score_ = individual.evaluate
 			val score =
 				if (score_.isNaN)
@@ -36,7 +36,7 @@ object Application extends App {
 				else
 					score_
 			acc + Math.pow(score - actual, 2)
-		} + Math.pow(2, individual.root.size)*1.0E-7
+		} + Math.pow(2, individual.root.size) * 1.0E-7
 	}
 
 	//routelette wheel selection
@@ -46,7 +46,7 @@ object Application extends App {
 	// run current generation
 	def step(population: List[ExpressionTree]): (List[ExpressionTree], (ExpressionTree, Double)) = {
 		// evaluate
-		val sampleSet = samples(100)
+		val sampleSet = samples(200)
 		val popWithScore = population.map { individual =>
 			val score_ = evaluate(individual, sampleSet)
 			val score =
@@ -62,20 +62,20 @@ object Application extends App {
 		val sortedPopWithScore = popWithScore.sortWith(_._2 < _._2)
 		val best = sortedPopWithScore.head
 		// select top 10
-		val selected = sortedPopWithScore.take(5)
+		val selected = sortedPopWithScore.take(10)
 		// crossover, mutate the top 10
 		val reproduced = selected.foldLeft(List[ExpressionTree]()) {
 			case (acc, (individual, score)) =>
 				val randomIndividual = population(rand.nextInt(population.size))
 				val pairs = individual.crossover(randomIndividual)
 				val mutatedPairs1 = List(pairs._1, pairs._2).map { individual =>
-					if (rand.nextFloat < 0.1)
+					if (rand.nextFloat < 0.2)
 						individual.mutateRoot
 					else
 						individual
 				}
 				val mutatedPairs2 = mutatedPairs1.map { individual =>
-					if (rand.nextFloat < 0.1)
+					if (rand.nextFloat < 0.2)
 						individual.mutateLeaf
 					else
 						individual
@@ -83,19 +83,19 @@ object Application extends App {
 				acc.+:(mutatedPairs2.head).+:(mutatedPairs2.last)
 		}
 		// replace bottom 10 with the reproduced
-		(reproduced ++ sortedPopWithScore.dropRight(10).map(_._1), best)
+		(reproduced ++ sortedPopWithScore.dropRight(20).map(_._1), best)
 
 	}
 
-	var cur = init(100)
+	var cur = init(200)
 	var bestSoFar = Double.MaxValue
 	println(bestSoFar)
-	for (i <- 0 until 1000) {
+	for (i <- 0 until 50000) {
 		val (next, best) = step(cur)
 		cur = next
 		if (bestSoFar > best._2) {
 			bestSoFar = best._2
-			println(best._1, best._2)
+			println(best._1, best._2, i)
 		}
 	}
 

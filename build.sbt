@@ -29,3 +29,5 @@ libraryDependencies ++= Seq(
 ScoverageSbtPlugin.instrumentSettings
 
 //scalaSource in Compile <<= baseDirectory(_ /"src")
+
+javaOptions in run += "-Xss2048m"

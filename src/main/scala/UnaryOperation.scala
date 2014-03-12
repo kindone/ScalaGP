@@ -22,6 +22,18 @@ case class Sqrt(center: Expression) extends UnaryOperation {
 	override def toString() = s"Sqrt(${center.toString})"
 }
 
+case class Sin(center: Expression) extends UnaryOperation {
+	def apply(implicit table: Vector[Double]) = Math.sin(center.apply)
+	def copy(c: Expression) = Sin(c)
+	override def toString() = s"Sin(${center.toString})"
+}
+
+case class Cos(center: Expression) extends UnaryOperation {
+	def apply(implicit table: Vector[Double]) = Math.cos(center.apply)
+	def copy(c: Expression) = Cos(c)
+	override def toString() = s"Cos(${center.toString})"
+}
+
 case class Ceil(center: Expression) extends UnaryOperation {
 	def apply(implicit table: Vector[Double]) = Math.ceil(center.apply)
 	def copy(c: Expression) = Ceil(c)
